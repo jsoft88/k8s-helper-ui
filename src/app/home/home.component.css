@@ -1,0 +1,25 @@
+.canvas {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2r9//38gYGAEESAAEGAAasgJOgzOKCoAAAAASUVORK5CYII=);
+    height: 896px;
+    width: 100%;
+}
+
+.canvas-parcel {
+    height: 64px;
+    width: 64px;
+    float: left;
+}
+
+a.nav-link {
+    display: flex;
+    align-items: center;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.btn-component {
+    width: 64px;
+    height: 64px;
+}

@@ -1,0 +1,148 @@
+<div class="row">
+  <div class="col">
+    <div class="alert alert-primary" role="alert">
+      This is an open source project aimed at graphically building Kubernetes concepts, by providing templates
+      and also providing the different parts comprising a given concept. For example, you can choose a premade
+      pod definition or just assemble yourself the pod definition by including the different components.
+      <b>Contributions will be highly appreciated to help build the tool faster :)</b>
+    </div>
+  </div>
+</div>
+<div class="row" style="margin-top: 20px;">
+  <div class="col-12">
+    <button type="button" style="margin-right: 10px;" class="btn btn-outline-info btn-lg" data-toggle="modal" data-target="#aboutHelper">About k8s helper</button>
+    <button type="button" style="margin-right: 10px;" class="btn btn-outline-primary btn-lg" (click)="onGenerateYamlClick($event)">Generate yaml</button>
+    <button type="button" class="btn btn-outline-dark btn-lg">Something else</button>
+  </div>
+</div>
+<div class="row" style="margin-top: 20px;">
+  <div class="col-4">
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Components
+            </button>
+          </h5>
+        </div>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            <ul class="nav nav-tabs bg-primary" id="categoryTabs" role="tablist">
+              <li class="nav-item" *ngFor="let category of categories; let i = index">
+                <a id="cat{{ i }}-tab" attr.aria-controls="cat{{ i }}" attr.role="tab" attr.data-toggle="tab" class="nav-link {{ htmlTabPaneActive[i] }}" href="#{{ category | categoryGetLabel: category }}" (click)="onCategoryTabChange($event, category)">{{ category | categoryGetLabel: category }}</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div *ngFor="let category of categories; let i = index" class="tab-pane {{ htmlTabPaneActive[i] }}" id="{{ category | categoryGetLabel: category }}" role="tabpanel" attr.aria-labelledby="cat{{ i }}-tab">
+                <div class="container">
+                  <div class="row" *ngFor="let entry of componentRowBreaker | keyvalue">
+                    <button id="{{ cw | categoryComponentWrapperId: cw }}" *ngFor="let cw of entry.value" style="margin-right: 5px;" type="button" class="btn btn-outline-dark btn-component" draggable="true" (dragstart)="onComponentDragStart($event, cw)"><i id="{{ cw | categoryComponentWrapperGetIcon: cw }}" class="material-icons">{{ cw | categoryComponentWrapperGetIcon: cw }}</i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="output">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              YAML Output
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body" id="outputYamlContainer">
+            <h4 *ngIf="!yamlOutput">No output available.</h4>
+            {{ yamlOutput }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="row">
+      <div class="col-12">
+        <ul id="canvasTab" class="nav nav-tabs bg-dark" role="tablist">
+          <li class="nav-item" *ngFor="let cnvas of canvas; let i = index">
+            <!-- <a id="{{ cnvas | canvasGetCanvasId: cnvas }}-tab" *ngIf="i === activeCanvas" class="nav-link active" href="#{{ cnvas | canvasGetCanvasId: cnvas }}" (click)="onCanvasSelected($event)">{{ cnvas | canvasGetCanvasId: cnvas }}</a> -->
+            <a id="{{ cnvas | canvasGetCanvasId: cnvas }}-tab" class="nav-link {{ activeCanvas === i ? 'active' : '' }}" href="#{{ cnvas | canvasGetCanvasId: cnvas }}" (click)="onCanvasSelected($event, cnvas)">{{ cnvas | canvasGetCanvasId: cnvas }}</a>
+          </li>
+          <li class="nav-item">
+            <a id="addCanvas" class="nav-link" href="#" (click)="onAddCanvas($event)">Add<i class="material-icons">add-box</i></a>
+          </li>
+        </ul>
+        <div id="tab-content-canvas" class="tab-content" (window:resize)="onWindowResized($event)">
+          <div id="{{ cnvas | canvasGetCanvasId: cnvas }}" class="tab-pane {{ activeCanvas === i ? 'active' : '' }}" role="tabpanel" attr.aria-labelledby="{{ cnvas | canvasGetCanvasId: cnvas }}-tab" *ngFor="let cnvas of canvas; let i = index">
+            <div id="{{ cnvas | canvasGetCanvasId: cnvas }}-container" class="canvas" (drop)="onComponentDrop($event)" (dragover)="onDragOver($event)">
+              <div class="canvas-parcel" *ngFor="let grid of canvasGrids" data-toggle="popover" title="popover" data-content="hello world!">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL dialogs-->
+<div class="modal fade" id="aboutHelper" tabindex="-1" attr.role="dialog" aria-labelledby="aboutHelperTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="aboutHelperTitle">About this helper</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This is a tool that helps assemble yaml definitions for Kubernetes concepts. You can choose to use
+        the predefined concepts or assemble yourself the concept definition you need, with fields adjusted
+        to your own use case. Given it is an open-source project, do not expect to find all predefined concepts
+        already in place, but feel free to contribute by adding those that you cannot find included.<br/>
+        The mechanism is to choose a category from the tabs in the sidebar to the left, and then drag and drop
+        into to the canvas on the left side. You can add another canvas if you need to do so. When you finish
+        adding the components you need, click on the button <b>Generate yaml</b> to get the yaml definition of
+        your creation.<br/>
+        Hope you find this tool easy enough to use and easy enough to get started with Kubernetes concepts.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="componentForm" tabindex="-1" attr.role="dialog" aria-labelledby="componentFormTitle" aria-hidden="true" #componentForm>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="componentFormTitle">Fill in component data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link {{ (entry.key | categoryComponentGetLabel: entry.key) === activeCategoryComponentForm ? 'active' : '' }}" id="v-pills-{{ entry.key | categoryComponentGetLabel: entry.key }}-tab" data-toggle="pill" href="#v-pills-{{ entry.key | categoryComponentGetLabel: entry.key }}" role="tab" attr.aria-controls="v-pills-{{ entry.key | categoryComponentGetLabel: entry.key }}" aria-selected="false" *ngFor="let entry of categoryComponentJsonData | keyvalue" (click)="onCategoryComponentFormFieldClick($event, entry.key)">{{ entry.key | categoryComponentGetLabel: entry.key }}</a>
+              </div>
+            </div>
+            <div class="col">
+              <div class="tab-content" id="v-pills-tabcontent">
+                <div class="tab-pane fade show {{ (entry.key | categoryComponentGetLabel: entry.key) === activeCategoryComponentForm ? 'active' : '' }}" id="v-pills-{{ entry.key | categoryComponentGetLabel: entry.key }}" role="tabpanel" attr.aria-labelledby="v-pills-{{ entry.key | categoryComponentGetLabel: entry.key }}-tab" *ngFor="let entry of categoryComponentJsonData | keyvalue">
+                  <json-schema-form [schema]="entry.value"></json-schema-form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

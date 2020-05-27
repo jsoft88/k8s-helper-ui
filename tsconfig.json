@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ng7-material": [
+        "dist/ng7-material"
+      ],
+      "ng7-material/*": [
+        "dist/ng7-material/*"
+      ]
+    }
   }
 }
