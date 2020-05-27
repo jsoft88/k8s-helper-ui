@@ -1,6 +1,12 @@
 import { CategoryComponentWrapper } from './ui-components';
 import { K8sConceptComponent } from 'src/core/k8s-concept-component';
 
+/**
+ * This abstract class can be observed as the base class
+ * for mapping from a @class which @implements `K8sConceptComponent in @namespace `core`
+ * to a @class `CategoryComponentWrapper`. For example, from Pod definition in `core` to 
+ * Pod definition for UI.
+ */
 export abstract class TemplateDefinitions {
     protected uiDefinition: CategoryComponentWrapper;
     protected coreDefinition: K8sConceptComponent[];

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ElementRef, Renderer2 } from '@angular/core';
 import { UiComponents, CategoryComponent, Category, CategoryComponentWrapper, CanvasManager, Canvas } from 'src/backend/ui-components';
 import { Utils } from 'src/backend/utils';
-import * as $ from 'jquery';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-home',

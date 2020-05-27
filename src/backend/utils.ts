@@ -12,7 +12,21 @@ import { PodDefinition } from './pod-definition';
 import { TemplateDefinitions } from './template-definitions';
 import { SimpleDefinition } from './simple-definition';
 
+/**
+ * Static class containg different methods that can be used throughout the application
+ */
 export class Utils {
+    /**
+     * This method returns the number of categories components wrappers' that can be fit in a row (or page)
+     * considering the page size
+     * @param pages number of pages
+     * @param elementsPerPage number of elements to fit per page
+     * @param allElements the elements to paginate
+     * @returns A key/value pair, where the key is the page number and the value is an array containing the
+     * elements to fit in that page.
+     *
+     * *TODO*: consider allElements as `any` and it could be used for other types as well
+     */
     public static paginatedStructure(
         pages: number, elementsPerPage: number, allElements: CategoryComponentWrapper[]): Map<number, CategoryComponentWrapper[]> {
             const retVal = new Map();
@@ -24,6 +38,10 @@ export class Utils {
     }
 }
 
+/**
+ * Possible legacy class. To be decided whether it should be @deprecated in favor
+ * of the method in @class `CategoryComponent` @method `getUIDefinition2Yaml`.
+ */
 export class UIComponent2YamlDoc {
     public static yamlEntryBuilder(categoryComponent: CategoryComponent): YamlEntry {
         const yamlEntry = new YamlEntry();
@@ -47,6 +65,11 @@ export class UIComponent2YamlDoc {
     }
 }
 
+/**
+ * Factory class for getting category components.
+ * As new category component wrappers are added, include it in this class.
+ * Also, a caching mechanism is in place to reuse the components and avoid recreating them every time.
+ */
 export class UIComponentFactory {
     static K8S_API = 'api';
     static K8S_CONTAINER_PORT = 'container-port';
